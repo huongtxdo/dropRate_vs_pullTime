@@ -8,7 +8,7 @@ There is nothing you can do to get better results.
 
 ## Or is there?
 
-This is a personal project that aims to find out whether there is a causation relationship between the time I pull the author's wishes and their drop rate. 
+This is a personal project that aims to find out whether there is a causation relationship between the time the author pull their wishes and their drop rate. 
 The data is generated from the author's own wish history, which will be updated in the future when they have more means (i.e. primogems) to do so.
 
 ## !! Disclaimer
