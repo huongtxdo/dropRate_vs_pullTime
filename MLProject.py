@@ -1,7 +1,3 @@
-
-# In[1]:
-
-
 import numpy as np
 import pandas as pd
 import time
@@ -13,10 +9,6 @@ from sklearn.metrics import classification_report
 from sklearn.svm import SVC
 from sklearn.metrics import accuracy_score, confusion_matrix, zero_one_loss  # evaluation metrics
 
-
-# In[2]:
-
-
 FMIRawData = pd.read_excel("data.xlsx")
 
 # sanity check the shape of FMIRawData
@@ -25,25 +17,13 @@ assert FMIRawData.shape == (387,10)
 # print the first 5 rows of the DataFrame 'FMIRawData'
 FMIRawData.head(5) 
 
-
-# In[3]:
-
-
 #check the columns in the data
 FMIRawData.columns
-
-
-# In[4]:
-
 
 #remove unnecessary columns
 data = FMIRawData.drop(['time','time format','total','4* counter','within pity'], axis=1)
 
 data.head(5) 
-
-
-# In[5]:
-
 
 #Separate scatter plots between one feature to the label 'rarity' 
 #The darker the dots, the denser the population is/
@@ -70,16 +50,8 @@ variables = data.columns[0:4]
  
 correlation(data,variables,2,2)
 
-
-# In[6]:
-
-
 #calculate correlation between different features to the label 'rarity'
 data.corr()['rarity'].loc[variables]
-
-
-# In[7]:
-
 
 #We will use logistic regression for the dataset
 
@@ -93,15 +65,10 @@ binarized_rarity = pd.cut(data['rarity'],                          bins=bi_cut_b
 data.insert(5, 'binarized rarity', binarized_rarity)
 data.head(10)
 
-
-# In[8]:
-
-
 #visualize the data but with binarized rarity instead
 
 jet= plt.get_cmap('hsv')
 colors = iter(jet(np.linspace(0,1,10)))
-
  
 def correlation(df,variables, n_rows, n_cols):
     fig = plt.figure(figsize=(8,6))
@@ -121,27 +88,15 @@ variables = data.columns[0:4]
  
 correlation(data,variables,3,3)
 
-
-# In[9]:
-
-
 # Some observations from the above figures
 # 1. Better rarity happens approximately in the last 30 minutes of an hour and in the first 40 seconds of a minute
 # i.e. from (mm:ss) 31:00  until 31:40, then 31:00 until 31:40, etc 
 # 2. Higher drop rates do not guarantee better rarity
 
-
-# In[10]:
-
-
 #X is a list of features
 X = data.values[:,0:4]
 #label rarity
 y = data['binarized rarity'].to_numpy()
-
-
-# In[11]:
-
 
 #SPLIT THE DATASET
 #60% of the dataset is used for model training
@@ -149,10 +104,6 @@ X_train, X_rem, y_train, y_rem = train_test_split(X, y, test_size=0.4, random_st
 
 #50% of the remaining dataset is used for model testing, the rest is used for validation
 X_val, X_test, y_val, y_test = train_test_split(X_rem, y_rem, test_size=0.5, random_state=42)
-
-
-# In[12]:
-
 
 #Apply Logistic regression for the train and validation set
 start = time.time()
@@ -170,10 +121,6 @@ print("accuracy of the validation set: ", acc_val)
 print(f"Time to performed logistic regression: {stop-start}s")
 print(clf_report)
 
-
-# In[13]:
-
-
 # Apply SVC for the train and validation set
 startSVC = time.time()
 clf1 = SVC(kernel="linear", C=100000)
@@ -190,10 +137,6 @@ print("accuracy of the train set using SVC: ", acc_train_SVC)
 print("accuracy of the validation set using SVC: ", acc_val_SVC)
 print(f"Time to performed SVC: {stopSVC-startSVC}s")
 print(clf_report)
-
-
-# In[14]:
-
 
 # Use KFold for Logistic regression, n_splits = 15
 cv = KFold(n_splits=15, random_state=43, shuffle=True)
@@ -213,10 +156,6 @@ plt.hist(validation_accuracy)
 plt.title("Validation accuracy distribution for logistic regression")
 plt.show() 
 
-
-# In[15]:
-
-
 # Use KFold for SVC, n_splits = 15
 cv1 = KFold(n_splits=15, random_state=43, shuffle=True)
 validation_accuracy = []
@@ -235,19 +174,8 @@ plt.hist(validation_accuracy)
 plt.title("Validation accuracy distribution for SVC")
 plt.show() 
 
-
-# In[16]:
-
-
 # Perform accuracy calculation on the test set for Logistic Regression
 
 y_pred_test = clf.predict(X_test)
 acc_test = accuracy_score(y_test, y_pred_test)
 print("accuracy of the test set: ", acc_test)
-
-
-# In[ ]:
-
-
-
-
